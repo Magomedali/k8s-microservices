@@ -5,3 +5,10 @@ IngressNginx:
 
 Istio:
   enabled: true
+
+prometheus:
+  operator:
+    enabled: false
+    alerts:
+      enabled: false
+

@@ -1,0 +1,6 @@
+dependencies:
+- name: rabbitmq-ha
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 1.46.2
+digest: sha256:2bb321cd7b4abedab7d7bdfbbc8dd76516323c2727446384ed91c24651eb66fb
+generated: "2020-06-16T17:48:51.721102+03:00"

@@ -1,0 +1,7 @@
+ServiceType: NodePort
+
+IngressNginx:
+  enabled: false
+
+Istio:
+  enabled: true

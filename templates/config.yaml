@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tutorial-config-nginx
+data:
+{{- if .Files.Get "config/nginx/bot.zanudabot.conf" }}
+  bot.zanudabot.conf: |
+{{ .Files.Get "config/nginx/bot.zanudabot.conf" | nindent 3 }}
+{{ else }}
+{{ fail "Invalid chart" }}
+{{ end }}
+  index.html: |
+    Hello World From kube 4

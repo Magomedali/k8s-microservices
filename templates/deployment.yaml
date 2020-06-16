@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tutorial
+spec:
+  selector:
+    matchLabels:
+      proxy: tutorial
+  template:
+    metadata:
+      labels:
+        proxy: tutorial
+    spec:
+      initContainers:
+        - name: configpass
+          image: nginx:alpine
+          command: ['sh', '-c']
+          args:
+            - mkdir -p /tmpconfig/nginx/conf.d &&
+              cp /etc/nginx/conf.d/* /tmpconfig/nginx/conf.d &&
+              mkdir -p /tmpconfig/site &&
+              ln -sf /configmap/bot.zanudabot.conf /tmpconfig/nginx/conf.d/bot.zanudabot.conf &&
+              ln -sf /configmap/index.html /tmpconfig/site/index.html
+          volumeMounts:
+            - name: tmpconfig
+              mountPath: /tmpconfig
+            - name: nginx-config
+              mountPath: /configmap
+      containers:
+        - name: tutorial-nginx
+          image: nginx:alpine
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /configmap
+            - name: tmpconfig
+              mountPath: /etc/nginx/conf.d
+              subPath: nginx/conf.d
+            - name: tmpconfig
+              mountPath: /var/www/site
+              subPath: site
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: tutorial-config-nginx
+            items:
+              - key: bot.zanudabot.conf
+                path: bot.zanudabot.conf
+              - key: index.html
+                path: index.html
+        - name: tmpconfig
+          emptyDir: {}

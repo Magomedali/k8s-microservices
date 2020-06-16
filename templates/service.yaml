@@ -78,8 +78,14 @@ spec:
   servers:
   - port:
       number: 31400
-      name: amqp
+      name: http
       protocol: HTTP
+    hosts:
+      - "*"
+  - port:
+      number: 15443
+      name: amqp
+      protocol: TCP
     hosts:
       - "*"
 
@@ -101,5 +107,13 @@ spec:
         host: tutorial-rabbitmq-ha 
         port: 
           number: 15672
+  tcp:
+  - match:
+    - port: 15443
+    route:
+    - destination:
+        host: tutorial-rabbitmq-ha 
+        port: 
+          number: 5672
 
 {{- end }}
